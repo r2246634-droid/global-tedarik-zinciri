@@ -1,0 +1,540 @@
+/* ===== GENEL RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: linear-gradient(135deg, #1e3a5f, #0f2944);
+  padding: 12px 24px;
+  border-bottom: 2px solid #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.header h1 {
+  font-size: 1.4rem;
+  color: #60a5fa;
+  letter-spacing: 1px;
+}
+
+.header p {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* ===== TEDARİK ZİNCİRİ PIPELINE ===== */
+.pipeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #1e293b;
+  padding: 10px 20px;
+  border-bottom: 1px solid #334155;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+.stage {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.stage.raw      { background: #78350f; color: #fde68a; border: 1px solid #f59e0b; }
+.stage.refine   { background: #1e3a5f; color: #93c5fd; border: 1px solid #3b82f6; }
+.stage.produce  { background: #134e4a; color: #6ee7b7; border: 1px solid #10b981; }
+.stage.dist     { background: #312e81; color: #c4b5fd; border: 1px solid #8b5cf6; }
+.stage.user     { background: #7f1d1d; color: #fca5a5; border: 1px solid #ef4444; }
+
+.arrow {
+  color: #64748b;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* ===== ANA CONTAINER ===== */
+.main-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 320px;
+  background: #1e293b;
+  border-right: 1px solid #334155;
+  overflow-y: auto;
+  flex-shrink: 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ===== CARD ===== */
+.card {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.card h2 {
+  font-size: 0.85rem;
+  color: #60a5fa;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #1e3a5f;
+  padding-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ===== MALZEME KARTLARI ===== */
+.material-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 0.82rem;
+}
+
+.material-item strong {
+  width: 55px;
+  font-size: 0.85rem;
+}
+
+.material-item span {
+  color: #94a3b8;
+  flex: 1;
+}
+
+.material-item.lithium { background: #172554; border-left: 3px solid #3b82f6; }
+.material-item.cobalt  { background: #3b0764; border-left: 3px solid #a855f7; }
+.material-item.nickel  { background: #052e16; border-left: 3px solid #22c55e; }
+
+.risk-badge {
+  background: #7f1d1d;
+  color: #fca5a5;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  flex: none !important;
+}
+
+/* ===== ÜRETİCİLER ===== */
+.producer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px;
+  background: #1e293b;
+  border-radius: 7px;
+  margin-bottom: 5px;
+}
+
+.flag { font-size: 1.4rem; }
+
+.producer div {
+  display: flex;
+  flex-direction: column;
+}
+
+.producer strong { font-size: 0.85rem; color: #e2e8f0; }
+.producer small  { font-size: 0.72rem; color: #64748b; }
+
+/* ===== ALGORİTMA BUTONLARI ===== */
+.algo-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.algo-btn {
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  background: #1e3a5f;
+  color: #93c5fd;
+  border: 1px solid #3b82f6;
+}
+
+.algo-btn:hover { background: #2563eb; color: white; transform: translateY(-1px); }
+.algo-btn.active { background: #2563eb; color: white; box-shadow: 0 0 10px #3b82f680; }
+.algo-btn.reset  { background: #1e293b; color: #64748b; border-color: #334155; grid-column: 1 / -1; }
+.algo-btn.reset:hover { background: #334155; color: #e2e8f0; }
+
+/* ===== SONUÇ PANELİ ===== */
+.result-panel {
+  background: #0f2944;
+  border: 1px solid #1e3a5f;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.8rem;
+}
+
+.result-panel h3 {
+  color: #60a5fa;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+}
+
+.result-panel.hidden { display: none; }
+
+.result-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid #1e3a5f;
+  color: #cbd5e1;
+}
+
+.result-step:last-child { border-bottom: none; }
+
+.step-num {
+  background: #1e3a5f;
+  color: #60a5fa;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.step-cost {
+  margin-left: auto;
+  color: #34d399;
+  font-weight: 600;
+}
+
+/* ===== FİLTRELER ===== */
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  transition: background 0.2s;
+  margin-bottom: 4px;
+}
+
+.filter-label:hover { background: #1e293b; }
+
+.filter-label input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #3b82f6;
+}
+
+/* ===== HARİTA ===== */
+#map {
+  flex: 1;
+  background: #1e293b;
+}
+
+/* ===== ALT BİLGİ ÇUBUĞU ===== */
+.info-bar {
+  background: #1e293b;
+  border-top: 1px solid #334155;
+  padding: 8px 20px;
+  display: flex;
+  gap: 30px;
+  font-size: 0.78rem;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.info-bar strong { color: #60a5fa; }
+
+/* ===== LEAFLET POPUP CUSTOM ===== */
+.leaflet-popup-content-wrapper {
+  background: #0f172a !important;
+  border: 1px solid #3b82f6 !important;
+  color: #e2e8f0 !important;
+  border-radius: 10px !important;
+}
+
+.leaflet-popup-tip { background: #0f172a !important; }
+
+.popup-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #60a5fa;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #1e3a5f;
+  padding-bottom: 4px;
+}
+
+.popup-row {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin: 3px 0;
+  display: flex;
+  gap: 6px;
+}
+
+.popup-row span { color: #e2e8f0; }
+
+/* ===== SCROLLBAR ===== */
+.sidebar::-webkit-scrollbar { width: 5px; }
+.sidebar::-webkit-scrollbar-track { background: #0f172a; }
+.sidebar::-webkit-scrollbar-thumb { background: #334155; border-radius: 5px; }
+
+/* ===== RESPONSİVE ===== */
+@media (max-width: 768px) {
+  .main-container { flex-direction: column; }
+  .sidebar { width: 100%; height: 300px; border-right: none; border-bottom: 1px solid #334155; }
+  .pipeline { font-size: 0.65rem; }
+}
+/* ===== ANİMASYONLU ROTA ===== */
+@keyframes dash-flow {
+  to { stroke-dashoffset: -30; }
+}
+
+@keyframes dash-flow-reverse {
+  to { stroke-dashoffset: 30; }
+}
+
+/* SVG path animasyonu - Leaflet polyline'lar SVG kullanır */
+.animated-sea path,
+.animated-sea .leaflet-interactive {
+  stroke-dasharray: 10, 6;
+  stroke-dashoffset: 0;
+  animation: dash-flow 1.2s linear infinite;
+}
+
+.animated-air path,
+.animated-air .leaflet-interactive {
+  stroke-dasharray: 14, 5;
+  stroke-dashoffset: 0;
+  animation: dash-flow 0.8s linear infinite;
+}
+
+.animated-land path,
+.animated-land .leaflet-interactive {
+  stroke-dasharray: 6, 8;
+  stroke-dashoffset: 0;
+  animation: dash-flow 1.8s linear infinite;
+}
+
+/* Highlight rotası animasyonu */
+.animated-highlight path,
+.animated-highlight .leaflet-interactive {
+  stroke-dasharray: 15, 5;
+  animation: dash-flow 0.6s linear infinite;
+}
+
+/* Araç ikonu animasyonu */
+@keyframes vehicle-pulse {
+  0%   { transform: scale(1);   opacity: 1; }
+  50%  { transform: scale(1.3); opacity: 0.7; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+.vehicle-marker {
+  animation: vehicle-pulse 2s ease-in-out infinite;
+}
+
+/* Risk bölgesi titreşimi */
+@keyframes risk-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.risk-marker { animation: risk-blink 1.5s ease-in-out infinite; }
+/* ===== BOTTLENECK STİLLERİ ===== */
+
+/* Aşama izleme çubuğu */
+.stage-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 8px;
+  border-radius: 7px;
+  margin-bottom: 5px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.stage-bar:hover { filter: brightness(1.2); }
+
+.stage-bar.ok       { background:#052e16; border-color:#22c55e; }
+.stage-bar.warning  { background:#422006; border-color:#f59e0b; }
+.stage-bar.critical { background:#450a0a; border-color:#ef4444; }
+
+.stage-bar-name {
+  font-weight: 600;
+  flex: 1;
+}
+
+.stage-bar-pct {
+  font-weight: 700;
+  font-size: 0.82rem;
+  margin-left: 8px;
+}
+
+.stage-bar.ok       .stage-bar-pct { color: #22c55e; }
+.stage-bar.warning  .stage-bar-pct { color: #f59e0b; }
+.stage-bar.critical .stage-bar-pct { color: #ef4444; }
+
+/* Kapasite bar */
+.cap-bar-bg {
+  height: 4px;
+  background: #1e293b;
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.cap-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.8s ease;
+}
+
+/* Darboğaz listesi */
+.bottleneck-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 7px;
+  margin-bottom: 5px;
+  font-size: 0.78rem;
+  background: #1e293b;
+  border-left: 3px solid #ef4444;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.bottleneck-item:hover { background: #263548; }
+
+.bottleneck-item.warning { border-left-color: #f59e0b; }
+.bottleneck-item.critical { border-left-color: #ef4444; }
+
+.bn-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+.bn-info { flex: 1; }
+
+.bn-name {
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 2px;
+}
+
+.bn-reason { color: #94a3b8; font-size: 0.72rem; }
+
+.bn-score {
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.bn-score.critical { color: #ef4444; }
+.bn-score.warning  { color: #f59e0b; }
+
+/* Risk skoru renkleri */
+.risk-low      { color: #22c55e; }
+.risk-medium   { color: #f59e0b; }
+.risk-high     { color: #ef4444; }
+.risk-critical { color: #dc2626; }
+
+/* Bottleneck marker animasyonu */
+@keyframes bottleneck-pulse {
+  0%   { transform: scale(1);   box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+  50%  { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(239,68,68,0); }
+  100% { transform: scale(1);   box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+}
+
+.bottleneck-marker-el {
+  animation: bottleneck-pulse 1.2s ease-in-out infinite !important;
+}
+
+@keyframes warning-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.7); }
+  50%      { box-shadow: 0 0 0 8px rgba(245,158,11,0); }
+}
+
+.warning-marker-el {
+  animation: warning-pulse 1.8s ease-in-out infinite !important;
+}
+
+/* ===== POPUP İÇİ ÇÖZÜM BUTONLARI ===== */
+.mitigation-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.mitigation-btn {
+  background: #0f2944;
+  border: 1px solid #22c55e;
+  color: #22c55e;
+  padding: 7px 10px;
+  border-radius: 7px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.mitigation-btn:hover {
+  background: #052e16;
+  transform: translateX(3px);
+  box-shadow: 0 0 8px currentColor;
+}
+
+.mitigation-info {
+  background: #052e16;
+  color: #86efac;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 0.74rem;
+  border-left: 3px solid #22c55e;
+}
+
+/* Toast slide animation */
+@keyframes slideInRight {
+  from { transform: translateX(120%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}

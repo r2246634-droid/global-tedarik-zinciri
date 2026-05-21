@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Global Tedarik Zinciri – Batarya Teknolojisi</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+  <!-- Leaflet Ant Path -->
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ÜST BAŞLIK -->
+  <header class="header">
+    <h1>🔋 Global Tedarik Zinciri</h1>
+    <p>Batarya Teknolojisi Proje Raporu | Hazırlayan: Ruslan | Mayıs 2026</p>
+  </header>
+
+  <!-- TEDARİK ZİNCİRİ AŞAMALARI -->
+  <div class="pipeline">
+    <div class="stage raw">⛏️ Hammadde</div>
+    <div class="arrow">→</div>
+    <div class="stage refine">🏭 Saflaştırma</div>
+    <div class="arrow">→</div>
+    <div class="stage produce">🔬 Hücre Üretimi</div>
+    <div class="arrow">→</div>
+    <div class="stage dist">🚢 Bölgesel Dağıtım</div>
+    <div class="arrow">→</div>
+    <div class="stage user">👤 Son Kullanıcı</div>
+  </div>
+
+  <!-- ANA İÇERİK: Sol Panel + Harita -->
+  <div class="main-container">
+
+    <!-- SOL PANEL -->
+    <div class="sidebar">
+
+      <!-- Ham Maddeler -->
+      <div class="card">
+        <h2>⛏️ Ham Madde Kaynakları</h2>
+        <div class="material-item lithium">
+          <strong>Lityum</strong>
+          <span>Avustralya, Şili, Arjantin</span>
+        </div>
+        <div class="material-item cobalt">
+          <strong>Kobalt</strong>
+          <span>Demokratik Kongo Cumhuriyeti</span>
+          <span class="risk-badge">⚠️ Yüksek Risk</span>
+        </div>
+        <div class="material-item nickel">
+          <strong>Nikel</strong>
+          <span>Endonezya, Kanada, Rusya</span>
+          <span class="risk-badge">⚠️ Jeopolitik Risk</span>
+        </div>
+      </div>
+
+      <!-- Üretim Merkezleri -->
+      <div class="card">
+        <h2>🏭 Üretim Merkezleri</h2>
+        <div class="producer">
+          <span class="flag">🇰🇷</span>
+          <div>
+            <strong>Güney Kore</strong>
+            <small>LG, Samsung SDI, SK Innovation</small>
+          </div>
+        </div>
+        <div class="producer">
+          <span class="flag">🇨🇳</span>
+          <div>
+            <strong>Çin</strong>
+            <small>CATL, BYD</small>
+          </div>
+        </div>
+        <div class="producer">
+          <span class="flag">🇯🇵</span>
+          <div>
+            <strong>Japonya</strong>
+            <small>Panasonic, TDK</small>
+          </div>
+        </div>
+        <div class="producer">
+          <span class="flag">🇺🇸</span>
+          <div>
+            <strong>ABD</strong>
+            <small>Tesla Gigafactory</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Algoritmalar -->
+      <div class="card">
+        <h2>⚙️ Optimizasyon Algoritmaları</h2>
+        <div class="algo-buttons">
+          <button class="algo-btn" id="btn-dijkstra" onclick="runDijkstra()">
+            🔵 Dijkstra
+          </button>
+          <button class="algo-btn" id="btn-astar" onclick="runAStar()">
+            🟢 A* Algoritması
+          </button>
+          <button class="algo-btn" id="btn-knn" onclick="runKNN()">
+            🟠 K-NN Kümeleme
+          </button>
+          <button class="algo-btn reset" onclick="resetMap()">
+            🔄 Sıfırla
+          </button>
+        </div>
+
+        <!-- Sonuç Paneli -->
+        <div id="result-panel" class="result-panel hidden">
+          <h3 id="result-title"></h3>
+          <div id="result-content"></div>
+        </div>
+      </div>
+
+
+     <!-- BOTTLENECK ANALİZİ KARTI -->
+<div class="card" id="bottleneck-card">
+  <h2>⚠️ Darboğaz & Risk Analizi</h2>
+
+  <button class="algo-btn" id="btn-bottleneck"
+          onclick="runBottleneck()"
+          style="width:100%; margin-bottom:10px; background:#7f1d1d; 
+                 border-color:#ef4444; color:#fca5a5;">
+    🔴 Darboğaz Tespiti Çalıştır
+  </button>
+
+  <!-- Aşama İzleme Çubuğu -->
+  <div style="margin-bottom:10px;">
+    <div style="font-size:0.72rem; color:#64748b; 
+                margin-bottom:6px; text-transform:uppercase; 
+                letter-spacing:1px;">
+      Tedarik Zinciri Aşama İzleme
+    </div>
+    <div id="stage-monitor">
+      <!-- JS ile doldurulacak -->
+    </div>
+  </div>
+
+  <!-- Darboğaz Listesi -->
+  <div id="bottleneck-list" class="hidden">
+    <div style="font-size:0.72rem; color:#64748b; 
+                margin-bottom:6px; text-transform:uppercase; 
+                letter-spacing:1px;">
+      Tespit Edilen Darboğazlar
+    </div>
+    <div id="bottleneck-items"></div>
+  </div>
+
+  <!-- Genel Risk Skoru -->
+  <div id="risk-score-panel" class="hidden" style="
+    margin-top:10px;
+    background:#0f2944;
+    border:1px solid #1e3a5f;
+    border-radius:8px;
+    padding:10px;
+    text-align:center;">
+    <div style="font-size:0.75rem; color:#64748b;">
+      Genel Sistem Risk Skoru
+    </div>
+    <div id="risk-score-value" style="
+      font-size:2rem; 
+      font-weight:700; 
+      margin:4px 0;">
+    </div>
+    <div id="risk-score-label" style="font-size:0.78rem;"></div>
+  </div>
+
+</div>
+
+      <!-- Filtreler -->
+      <div class="card">
+        <h2>🗂️ Rota Filtreleri</h2>
+        <label class="filter-label">
+          <input type="checkbox" id="filter-air" checked onchange="toggleLayer('air')"/>
+          ✈️ Hava Yolu
+        </label>
+        <label class="filter-label">
+          <input type="checkbox" id="filter-sea" checked onchange="toggleLayer('sea')"/>
+          🚢 Deniz Yolu
+        </label>
+        <label class="filter-label">
+          <input type="checkbox" id="filter-land" checked onchange="toggleLayer('land')"/>
+          🚛 Kara Yolu
+        </label>
+      </div>
+
+    </div><!-- /sidebar -->
+
+    <!-- HARİTA -->
+    <div id="map"></div>
+
+  </div><!-- /main-container -->
+
+  <!-- ALTTA BİLGİ ÇUBUĞU -->
+  <div class="info-bar">
+    <span>📍 Toplam Düğüm: <strong>12</strong></span>
+    <span>🛣️ Aktif Rota: <strong id="active-route-count">8</strong></span>
+    <span>⚠️ Risk Bölgesi: <strong>2</strong></span>
+    <span>🔋 Tedarik Aşaması: <strong>5</strong></span>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Algoritma dosyaları -->
+  <script src="algorithms/dijkstra.js"></script>
+  <script src="algorithms/astar.js"></script>
+  <script src="algorithms/knn.js"></script>
+
+  <!-- Ana uygulama -->
+  <script src="app.js"></script>
+
+</body>
+</html>
